@@ -1,0 +1,202 @@
+---
+import site from '../data/site.json';
+import types from '../data/building-types.json';
+import pb from '../data/portable-buildings.json';
+
+const year = new Date().getFullYear();
+const popular = ['garages', 'workshops', 'barndominium', 'quonset-buildings', 'container-covers', 'agricultural-and-farm'];
+const popularTypes = popular
+  .map((s) => types.find((t: any) => t.slug === s))
+  .filter(Boolean) as any[];
+
+const pbPopular = ['barn', 'tool-shed-tall', 'utility-cabin', 'barn-garage', 'greenhouse']
+  .map((s) => (pb as any).products.find((x: any) => x.slug === s))
+  .filter(Boolean) as any[];
+
+const showPhone = Boolean(site.phone) && !site.phonePending;
+---
+
+<footer class="site-footer">
+  <div class="wrap">
+    <!-- Identity band: the NAP and the dealer notice, given room rather than
+         squeezed into the first column of a six-column grid. -->
+    <div class="foot-top">
+      <div class="foot-brand">
+        <div class="brand">
+          <svg class="brand__mark" viewBox="0 0 32 32" aria-hidden="true">
+            <path
+              fill="currentColor"
+              fill-rule="evenodd"
+              d="M16 2.6 24.4 7.2 30 12.4 30 29.4 2 29.4 2 12.4 7.6 7.2 Z M12.4 29.4 12.4 18.6 19.6 18.6 19.6 29.4 Z"
+            />
+          </svg>
+          <span class="brand__text">
+            <span class="brand__name">Marshall</span>
+            <span class="brand__sub">Sheds</span>
+          </span>
+        </div>
+        <p class="foot-desc">{site.tagline}</p>
+        <address class="foot-nap">
+          <span class="foot-nap__name">{site.name}</span>
+          <span>{site.address.street}</span>
+          <span>{site.address.city}, {site.address.region} {site.address.postal}</span>
+          {showPhone && <a href={`tel:${site.phoneRaw || site.phone}`}>{site.phone}</a>}
+          {/* Deliberately the general address only. This block is the NAP that
+              directories and Google cross-reference, and it has to read the same
+              on every page — sales@ and quotes@ live on /contact/ and /quote/. */}
+          {site.email && !site.emailPending && <a href={`mailto:${site.email}`}>{site.email}</a>}
+          <span class="foot-nap__hours">{site.hours}</span>
+        </address>
+      </div>
+
+      <div class="foot-cta">
+        <h2>Working out what to build?</h2>
+        <p>Send the size, the use and the address. We come back with a written number.</p>
+        <a class="btn btn--primary" href="/quote/">Request a Quote</a>
+      </div>
+    </div>
+
+    <div class="foot-grid">
+      <div class="foot-col">
+        <h3>Steel Buildings</h3>
+        <ul>
+          {popularTypes.map((t) => (
+            <li><a href={`/building-types/${t.slug}/`}>{t.name}</a></li>
+          ))}
+          <li><a href="/building-types/">All steel types</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h3>Portable Buildings</h3>
+        <ul>
+          {pbPopular.map((x) => (
+            <li><a href={`/portable-buildings/${x.slug}/`}>{x.name}</a></li>
+          ))}
+          <li><a href="/portable-buildings/">All portable buildings</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h3>Shop</h3>
+        <ul>
+          <li><a href="/inventory/">Clearance Inventory</a></li>
+          <li><a href="/options-and-finishes/">Options &amp; Finishes</a></li>
+          <li><a href="/models/">Building Models</a></li>
+          <li><a href="/sizes/">Popular Sizes</a></li>
+          <li><a href="/quote/">Request a Quote</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h3>Resources</h3>
+        <ul>
+          <li><a href="/resources/faq/">FAQ</a></li>
+          <li><a href="/resources/arch-vs-straight-wall/">Arch vs. Straight Wall</a></li>
+          <li><a href="/resources/galvalume-steel/">Galvalume Steel</a></li>
+          <li><a href="/resources/building-codes/">Building Codes by State</a></li>
+          <li><a href="/resources/assembly/">Assembly Guide</a></li>
+        </ul>
+      </div>
+
+      <div class="foot-col">
+        <h3>Company</h3>
+        <ul>
+          <li><a href="/about/">About Us</a></li>
+          <li><a href="/service-area/">Service Area</a></li>
+          <li><a href="/about/our-advantage/">Our Advantage</a></li>
+          <li><a href="/about/warranty/">Warranty</a></li>
+          <li><a href="/about/pricing/">Pricing</a></li>
+          <li><a href="/contact/">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="foot-notice">{site.dealerNotice}</p>
+
+    <div class="foot-bottom">
+      <p>&copy; {year} Marshall Sheds. All rights reserved.</p>
+      <nav aria-label="Legal">
+        <a href="/privacy/">Privacy</a>
+        <a href="/terms/">Terms</a>
+      </nav>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--bg-sunken);
+    padding-block: clamp(3rem, 7vw, 5rem) 2rem;
+    margin-top: 0;
+  }
+
+  .foot-top {
+    display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: clamp(2rem, 5vw, 4rem); align-items: start;
+    padding-bottom: 2.5rem;
+  }
+  .brand { display: flex; align-items: center; gap: 0.75rem; color: var(--text); }
+  .brand__mark { width: 32px; height: 32px; color: var(--accent); }
+  .brand__text { display: flex; flex-direction: column; line-height: 1.05; }
+  .brand__name { font-family: var(--font-serif); font-size: 1.25rem; font-weight: 700; }
+  .brand__sub { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.22em; color: var(--text-faint); }
+
+  .foot-desc { margin-top: 0.875rem; color: var(--text-muted); max-width: 40ch; }
+  .foot-nap {
+    display: flex; flex-direction: column; gap: 0.1875rem;
+    margin-top: 1.25rem; font-style: normal; font-size: 0.9375rem; color: var(--text-muted);
+  }
+  .foot-nap__name { font-weight: 700; color: var(--text); }
+  .foot-nap a { color: var(--accent); text-decoration: none; }
+  .foot-nap a:hover { text-decoration: underline; }
+  .foot-nap__hours { color: var(--text-faint); font-size: 0.875rem; margin-top: 0.375rem; }
+
+  .foot-cta {
+    background: var(--bg-raised);
+    border-radius: var(--radius-lg);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-sm);
+  }
+  .foot-cta h2 { font-size: 1.25rem; }
+  .foot-cta p { margin: 0.5rem 0 1.25rem; font-size: 0.9375rem; color: var(--text-muted); }
+
+  .foot-grid {
+    display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 2rem;
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .foot-col h3 {
+    font-family: var(--font-sans);
+    font-size: 0.6875rem; text-transform: uppercase; letter-spacing: 0.14em;
+    color: var(--text-faint); margin-bottom: 0.875rem;
+  }
+  .foot-col ul { list-style: none; padding: 0; }
+  .foot-col li { margin-bottom: 0.5rem; }
+  .foot-col a { font-size: 0.9375rem; color: var(--text-muted); text-decoration: none; }
+  .foot-col a:hover { color: var(--accent); }
+
+  .foot-notice {
+    font-size: 0.875rem; line-height: 1.6;
+    color: var(--text-faint);
+    padding-top: 2rem;
+    max-width: 78ch;
+  }
+
+  .foot-bottom {
+    display: flex; justify-content: space-between; align-items: center; gap: 1rem; flex-wrap: wrap;
+    margin-top: 2rem; padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.875rem; color: var(--text-faint);
+  }
+  .foot-bottom nav { display: flex; gap: 1.25rem; }
+  .foot-bottom a { color: var(--text-faint); text-decoration: none; }
+  .foot-bottom a:hover { color: var(--accent); }
+
+  @media (max-width: 900px) {
+    .foot-top { grid-template-columns: 1fr; }
+    .foot-grid { grid-template-columns: repeat(3, 1fr); gap: 1.75rem 2rem; }
+  }
+  @media (max-width: 560px) { .foot-grid { grid-template-columns: repeat(2, 1fr); } }
+</style>

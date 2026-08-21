@@ -1,0 +1,160 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import site from '../data/site.json';
+import locations from '../data/locations.json';
+
+interface Props {
+  title: string;
+  description?: string;
+  /** Breadcrumb trail, excluding Home and the current page. */
+  crumbs?: { label: string; href: string }[];
+  current?: string;
+  /** Root-relative OG image, e.g. "/og/types/garages.jpg". Falls back to the default. */
+  image?: string;
+}
+
+const { title, description = site.description, crumbs = [], current, image } = Astro.props;
+const fullTitle = title === site.name ? `${site.name} — ${site.tagline}` : `${title} | ${site.name}`;
+const origin = (Astro.site ?? new URL('https://marshall-sheds.vercel.app')).origin;
+const canonical = new URL(Astro.url.pathname, origin).href;
+// Social scrapers require an absolute URL — a root-relative path silently yields no preview.
+const ogImage = new URL(image ?? '/og/default.jpg', origin).href;
+
+const localBusiness = {
+  '@context': 'https://schema.org',
+  '@type': 'HomeAndConstructionBusiness',
+  name: site.name,
+  description: site.description,
+  url: origin,
+  image: ogImage,
+  ...(site.phone ? { telephone: site.phoneRaw ?? site.phone } : {}),
+  // Withheld until the mailbox actually receives — a dead address in schema is worse than none.
+  // One address only at the business level: `email` is part of the NAP that
+  // aggregators cross-check, so it has to match the footer everywhere.
+  ...(site.email && !site.emailPending ? { email: site.email } : {}),
+  // Departmental addresses belong on contactPoint rather than the business
+  // record. contactType is a controlled vocabulary, so quotes@ rides along
+  // with sales — it is the same desk, and inventing a type helps nobody.
+  ...(!site.emailPending && site.emails
+    ? {
+        contactPoint: [
+          {
+            '@type': 'ContactPoint',
+            contactType: 'customer service',
+            email: site.emails.info,
+            ...(site.phone ? { telephone: site.phoneRaw ?? site.phone } : {}),
+            areaServed: 'US',
+            availableLanguage: 'English',
+          },
+          {
+            '@type': 'ContactPoint',
+            contactType: 'sales',
+            email: site.emails.sales,
+            ...(site.phone ? { telephone: site.phoneRaw ?? site.phone } : {}),
+            areaServed: 'US',
+            availableLanguage: 'English',
+          },
+        ],
+      }
+    : {}),
+  address: {
+    '@type': 'PostalAddress',
+    ...(site.address.street ? { streetAddress: site.address.street } : {}),
+    addressLocality: site.address.city || locations.base.city,
+    addressRegion: site.address.region || locations.base.stateCode,
+    ...(site.address.postal ? { postalCode: site.address.postal } : {}),
+    addressCountry: 'US',
+  },
+  areaServed: [
+    ...locations.counties.map((c: any) => ({ '@type': 'AdministrativeArea', name: `${c.name}, Texas` })),
+    ...locations.counties.flatMap((c: any) =>
+      c.communities.map((t: string) => ({ '@type': 'City', name: `${t}, Texas` }))
+    ),
+  ],
+  openingHoursSpecification: [{
+    '@type': 'OpeningHoursSpecification',
+    dayOfWeek: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    opens: '08:00',
+    closes: '18:00',
+  }],
+  priceRange: '$$',
+  knowsAbout: [
+    'steel buildings', 'metal buildings', 'portable buildings', 'storage sheds',
+    'garages', 'workshops', 'barndominiums', 'quonset huts', 'carports',
+    'agricultural buildings', 'container covers',
+  ],
+};
+---
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {/* Pre-launch: keep the site out of search results. Crawling stays ALLOWED
+        in robots.txt so engines can actually see this directive — blocking the
+        crawl instead would leave bare URLs indexable and harder to remove.
+        Flip `indexable` to true in site.json at launch. */}
+    {!site.indexable && <meta name="robots" content="noindex, nofollow" />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content={fullTitle} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={fullTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <script type="application/ld+json" set:html={JSON.stringify(localBusiness)} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    {/* A serif display face against a humanist sans. Google Fonts is the only
+        external host the site loads from; both families have local fallbacks
+        in global.css so a blocked request degrades rather than breaks. */}
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bitter:wght@500;600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <Header />
+    <main id="main">
+      {crumbs.length > 0 && (
+        <nav class="crumbs" aria-label="Breadcrumb">
+          <div class="wrap">
+            <ol>
+              <li><a href="/">Home</a></li>
+              {crumbs.map((c) => (
+                <li><a href={c.href}>{c.label}</a></li>
+              ))}
+              {current && <li aria-current="page">{current}</li>}
+            </ol>
+          </div>
+        </nav>
+      )}
+      <slot />
+    </main>
+    <Footer />
+
+    <style>
+      .crumbs { border-bottom: 1px solid var(--border); background: var(--bg-raised); }
+      .crumbs ol {
+        display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem;
+        list-style: none; padding: 0.75rem 0; margin: 0;
+        font-size: 0.8125rem; color: var(--text-faint);
+      }
+      .crumbs li + li::before { content: '/'; margin-right: 0.5rem; color: var(--border-strong); }
+      .crumbs a { color: var(--text-muted); text-decoration: none; }
+      .crumbs a:hover { color: var(--accent); }
+      .crumbs [aria-current='page'] { color: var(--text); font-weight: 500; }
+    </style>
+  </body>
+</html>

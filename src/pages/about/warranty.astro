@@ -1,6 +1,7 @@
 ---
 import Article from '../../layouts/Article.astro';
 import site from '../../data/site.json';
+import { phoneLive, phoneHref } from '../../lib/contact';
 
 const toc = [
   { id: 'structure', label: 'How coverage is structured' },
@@ -72,10 +73,17 @@ const toc = [
   <ol>
     <li>
       Contact us with your order number and a description of the issue —
-      {!site.emailPending
-        ? <Fragment><a href={`mailto:${site.emails.info}?subject=${encodeURIComponent('Warranty claim')}`}>{site.emails.info}</a> or <a href={`tel:${site.phoneRaw ?? site.phone}`}>{site.phone}</a></Fragment>
-        : <a href={`tel:${site.phoneRaw ?? site.phone}`}>{site.phone}</a>}.
-      Email gives us a written record and lets you attach the photographs below.
+      {/* Whichever routes are actually live. With neither the address nor the
+          line published yet, this has to fall back to the contact form rather
+          than render an empty mailto: or tel: — a claim route that goes nowhere
+          is worse than one more click. */}
+      {!site.emailPending && (
+        <a href={`mailto:${site.emails.info}?subject=${encodeURIComponent('Warranty claim')}`}>{site.emails.info}</a>
+      )}
+      {!site.emailPending && phoneLive && ' or '}
+      {phoneLive && <a href={phoneHref}>{site.phone}</a>}
+      {site.emailPending && !phoneLive && <a href="/contact/">use the contact page</a>}.
+      {!site.emailPending && ' Email gives us a written record and lets you attach the photographs below.'}
     </li>
     <li>Provide photographs showing the condition and its location on the building.</li>
     <li>Have your stamped drawings and delivery documentation available.</li>

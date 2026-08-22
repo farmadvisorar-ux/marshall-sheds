@@ -74,15 +74,31 @@ All content lives in `src/data/` as JSON. No code changes needed to update the c
 JSON-LD schema and OG tags all read from it, so a change there lands everywhere
 at once.
 
+Three flags gate what a half-configured site is allowed to publish:
+
+| Flag | While true |
+|---|---|
+| `indexable: false` | `noindex` on every page; the sitemap is withheld from `robots.txt` while crawling stays allowed, so engines can actually see the directive |
+| `emailPending` | The address is withheld everywhere, schema included |
+| `phonePending` | The number is withheld everywhere, schema included — so it can be recorded before the line is answered |
+
+Everything that renders the phone goes through `src/lib/contact.ts`, so there is
+one place to get it wrong rather than nine.
+
 ### Before launch — required
 
-- [ ] **Get a phone number for this business and put it in `site.json`**
-      (`phone` and `phoneRaw`). Both are deliberately blank: the header, footer,
-      contact page and schema all omit the number rather than showing a
-      placeholder. This is the one field that cannot be borrowed from another
-      operation — Google resolves a Business Profile by address plus phone, and
-      a second profile on a number already in use is filed as a duplicate and
-      suspended. A free second line takes minutes to issue.
+- [ ] **Get a phone number for this business**, put it in `site.json` (`phone`
+      and `phoneRaw`), and set `phonePending: false` once the line is answered.
+      Both fields are blank today and the flag is on, so the header, footer,
+      contact page, quote page, warranty page, privacy page and business schema
+      all omit the number rather than showing a placeholder or an empty
+      `tel:` link. The flag exists so a number can be recorded before it is
+      live — without it, typing one in publishes it everywhere at once,
+      including the NAP that directories cross-reference. This is the one field
+      that cannot be borrowed from another operation: Google resolves a Business
+      Profile by address plus phone, and a second profile on a number already in
+      use is filed as a duplicate and suspended. A free second line takes
+      minutes to issue.
 - [ ] **Set up a form endpoint** of this site's own, and test a real submission
       end to end. Sharing an endpoint with another site mixes both inboxes.
 - [ ] **Set up email forwarding** for `info@`, `sales@` and `quotes@`, then set
@@ -279,7 +295,13 @@ Pages workflow only fires on a push to `main`.
   builds look fine.
 - **Titles are capped at 60 characters.** `scripts/check-meta.mjs` fails the
   build on an over-long or duplicated title. The brand name is part of every
-  title, so renaming the business can push pages over on its own.
+  title, so renaming the business can push pages over on its own — and the
+  tagline rides in the homepage title, which caps it at 43 characters.
+- **A withheld contact detail must not leave a dead link.** With no phone set,
+  an unguarded `tel:${site.phone}` renders as `href="tel:"` — a link to nowhere
+  next to a dangling "or call". The warranty page hit the worse version of
+  this: with the email withheld too, an empty link was the only claim route
+  offered. Guard on `phoneLive`, and give the copy somewhere to fall back to.
 
 ## Structure
 
@@ -288,7 +310,7 @@ src/
 ├── data/           JSON content — edit here
 ├── layouts/        Base.astro (head, OG, schema), Article.astro
 ├── components/     Header, Footer, Placeholder
-├── lib/images.ts   slug → image path resolution
+├── lib/            images.ts (slug → path), contact.ts (phone visibility)
 ├── scripts/        form-submit.js — shared fetch handler for both forms
 ├── pages/
 │   ├── building-types/      index + [...slug] → 24 pages  (steel)

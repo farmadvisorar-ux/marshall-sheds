@@ -4,6 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 import site from '../data/site.json';
 import locations from '../data/locations.json';
+import { phoneLive } from '../lib/contact';
 
 interface Props {
   title: string;
@@ -63,7 +64,7 @@ const localBusiness = {
   description: site.description,
   url: origin,
   image: ogImage,
-  ...(site.phone ? { telephone: site.phoneRaw ?? site.phone } : {}),
+  ...(phoneLive ? { telephone: site.phoneRaw ?? site.phone } : {}),
   // Withheld until the mailbox actually receives — a dead address in schema is worse than none.
   // One address only at the business level: `email` is part of the NAP that
   // aggregators cross-check, so it has to match the footer everywhere.
@@ -78,7 +79,7 @@ const localBusiness = {
             '@type': 'ContactPoint',
             contactType: 'customer service',
             email: site.emails.info,
-            ...(site.phone ? { telephone: site.phoneRaw ?? site.phone } : {}),
+            ...(phoneLive ? { telephone: site.phoneRaw ?? site.phone } : {}),
             areaServed: 'US',
             availableLanguage: 'English',
           },
@@ -86,7 +87,7 @@ const localBusiness = {
             '@type': 'ContactPoint',
             contactType: 'sales',
             email: site.emails.sales,
-            ...(site.phone ? { telephone: site.phoneRaw ?? site.phone } : {}),
+            ...(phoneLive ? { telephone: site.phoneRaw ?? site.phone } : {}),
             areaServed: 'US',
             availableLanguage: 'English',
           },

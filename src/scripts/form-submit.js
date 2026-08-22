@@ -13,17 +13,18 @@
  */
 
 import site from '../data/site.json';
+import { phoneLive } from '../lib/contact';
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
 /**
  * Both closing lines used to carry the phone number as a literal, which meant
  * a rebrand could leave the previous operation's number on a success screen.
- * They read it from site.json now, and drop the sentence entirely rather than
- * printing a half-finished one while no number is set.
+ * They go through the same `phoneLive` check the pages use, and drop the
+ * sentence entirely rather than printing a half-finished one.
  */
-const urgentCall = site.phone ? ` If it is urgent, call us on ${site.phone}.` : '';
-const retryCall = site.phone
+const urgentCall = phoneLive ? ` If it is urgent, call us on ${site.phone}.` : '';
+const retryCall = phoneLive
   ? ` Please call ${site.phone} or try again.`
   : ' Please try again in a moment.';
 

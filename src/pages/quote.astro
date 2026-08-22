@@ -17,7 +17,10 @@ import pb from '../data/portable-buildings.json';
  * rather than silently dropping a lead.
  */
 // Env var wins if set (handy for staging); otherwise the value in site.json.
-const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? site.formEndpoint ?? '';
+// `||`, not `??`. An unset GitHub Actions variable interpolates as an empty
+// string rather than being absent, and `??` only falls through on null and
+// undefined — so `""` would win and silently override the real endpoint.
+const endpoint = (import.meta.env.PUBLIC_FORM_ENDPOINT || site.formEndpoint || '').trim();
 const timelines = ['As soon as possible', 'Within 3 months', '3–6 months', '6–12 months', 'Still researching'];
 const pbProducts = (pb as any).products;
 ---
@@ -57,8 +60,8 @@ const pbProducts = (pb as any).products;
         {!site.emailPending && site.emails && (
           <p class="or-email">
             Rather not use a form? Send your details straight to
-            <a href={`mailto:${site.emails.quotes}?subject=${encodeURIComponent('Quote request')}`}>{site.emails.quotes}</a>{site.phone && !site.phonePending ? ', or call ' : '.'}
-            {site.phone && !site.phonePending && <a href={`tel:${site.phoneRaw || site.phone}`}>{site.phone}</a>}{site.phone && !site.phonePending ? '.' : ''}
+            <a href={`mailto:${site.emails.quotes}?subject=${encodeURIComponent('Quote request')}`}>{site.emails.quotes}</a>{site.phone ? ',' : '.'}
+            {site.phone && (<>or call <a href={`tel:${site.phoneRaw || site.phone}`}>{site.phone}</a>.</>)}
           </p>
         )}
       </div>
@@ -183,7 +186,7 @@ const pbProducts = (pb as any).products;
           </fieldset>
 
           <!-- Formspree: sets the notification subject so leads are scannable in an inbox -->
-          <input type="hidden" name="_subject" value="New quote request — Marshall Sheds" />
+          <input type="hidden" name="_subject" value="New quote request — marshallsheds.com" />
 
           <!-- honeypot (Formspree discards any submission where this is filled) -->
           <div class="visually-hidden" aria-hidden="true">

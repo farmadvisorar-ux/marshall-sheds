@@ -18,7 +18,10 @@ const siblings = fam.items.filter((o: any) => o.slug !== option.slug);
 ---
 
 <Base
-  title={`${option.name} — ${fam.familyName}`}
+  {/* familyName reads "Straight Wall Building Options", which pushes the
+      title past what Google prints once the brand suffix is added. The
+      page still shows the full name — this is the search-result form. */}
+  title={`${option.name} — ${fam.familyShort}`}
   description={option.summary}
   crumbs={[
     { label: 'Options & Finishes', href: '/options-and-finishes/' },

@@ -16,12 +16,16 @@ import site from '../data/site.json';
 
 const EMAIL_RE = /^[^@\s]+@[^@\s]+\.[^@\s]+$/;
 
-// The phone number lives in site.json and is withheld until the line is live,
-// so no message here may hardcode one. `phonePending` keeps a half-configured
-// number out of the copy the same way `emailPending` keeps it out of the schema.
-const phone = site.phonePending ? '' : site.phone;
-const urgentLine = phone ? ` If it is urgent, call us on ${phone}.` : '';
-const retryLine = phone ? `Please call ${phone} or try again.` : 'Please try again in a moment.';
+/**
+ * Both closing lines used to carry the phone number as a literal, which meant
+ * a rebrand could leave the previous operation's number on a success screen.
+ * They read it from site.json now, and drop the sentence entirely rather than
+ * printing a half-finished one while no number is set.
+ */
+const urgentCall = site.phone ? ` If it is urgent, call us on ${site.phone}.` : '';
+const retryCall = site.phone
+  ? ` Please call ${site.phone} or try again.`
+  : ' Please try again in a moment.';
 
 function clearErrors(form) {
   form.querySelectorAll('.err').forEach((n) => n.remove());
@@ -115,7 +119,7 @@ export function wireForm(formId, { successHeading, successBody } = {}) {
           form,
           successHtml(
             successHeading ?? 'Thanks — we have your request.',
-            (successBody ?? 'We will come back to you with a written quote.') + urgentLine
+            (successBody ?? 'We will come back to you with a written quote.') + urgentCall
           )
         );
         return;
@@ -134,7 +138,7 @@ export function wireForm(formId, { successHeading, successBody } = {}) {
       const p = document.createElement('p');
       p.className = 'err form-error';
       p.setAttribute('role', 'alert');
-      p.textContent = `Sorry — that did not send. ${err.message}. ${retryLine}`;
+      p.textContent = `Sorry — that did not send. ${err.message}.${retryCall}`;
       button?.insertAdjacentElement('afterend', p);
     } finally {
       if (button) {

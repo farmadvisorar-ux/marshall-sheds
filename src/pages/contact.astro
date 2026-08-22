@@ -2,7 +2,10 @@
 import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
 
-const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? site.formEndpoint ?? '';
+// `||`, not `??`. An unset GitHub Actions variable interpolates as an empty
+// string rather than being absent, and `??` only falls through on null and
+// undefined — so `""` would win and silently override the real endpoint.
+const endpoint = (import.meta.env.PUBLIC_FORM_ENDPOINT || site.formEndpoint || '').trim();
 
 // All three land in the same inbox, but publishing what each one is *for*
 // means a warranty question and a price request arrive pre-sorted.
@@ -10,8 +13,7 @@ const mailboxes = [
   { address: site.emails.info, purpose: 'General questions, orders in progress, warranty' },
   { address: site.emails.sales, purpose: 'Availability, lead times, dealer and volume enquiries' },
   { address: site.emails.quotes, purpose: 'Pricing and written quotes' },
-  // An unset address would render as a bare `mailto:` link that goes nowhere.
-].filter((m) => m.address);
+];
 ---
 
 <Base
@@ -61,12 +63,11 @@ const mailboxes = [
 
         {site.emailPending && (
           <div class="admin-note">
-            <strong>Publish note — remove before launch.</strong> Marshall Sheds has no
-            mailbox of its own yet. Register the addresses on the new domain, set up
-            forwarding, put them in <code>src/data/site.json</code> and flip
-            <code>emailPending</code> to <code>false</code> — they then appear here, in the
-            footer and in the business schema. The phone number works the same way through
-            <code>phonePending</code>.
+            <strong>Publish note — remove before launch.</strong> The email address
+            <code>{site.email}</code> is reserved but not yet receiving. Set up forwarding,
+            then flip <code>emailPending</code> to <code>false</code> in
+            <code>src/data/site.json</code> and it appears here, in the footer and in the
+            business schema.
           </div>
         )}
 
@@ -111,7 +112,7 @@ const mailboxes = [
             <textarea id="message" name="message" rows="6" required></textarea>
           </div>
 
-          <input type="hidden" name="_subject" value="New message — Marshall Sheds" />
+          <input type="hidden" name="_subject" value="New message — marshallsheds.com" />
 
           <div class="visually-hidden" aria-hidden="true">
             <label for="_gotcha">Leave this blank</label>

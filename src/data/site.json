@@ -1,14 +1,14 @@
 {
   "name": "Marshall Sheds",
-  "tagline": "Barns, Sheds and Steel Buildings, Sized to the Job",
-  "description": "Independent dealer of wood portable buildings and engineered steel building kits — sheds, barns, garages, workshops, barndominiums and commercial spans. Portable buildings arrive finished; steel kits ship nationwide with stamped drawings.",
+  "tagline": "From Backyard Sheds to 200-Foot Spans",
+  "description": "Authorized dealer of engineered steel building kits and wood portable buildings — garages, workshops, barndominiums, quonset huts, sheds and cabins.",
   "phone": "",
   "phoneRaw": "",
-  "email": "",
+  "email": "info@marshallsheds.com",
   "emails": {
-    "info": "",
-    "sales": "",
-    "quotes": ""
+    "info": "info@marshallsheds.com",
+    "sales": "sales@marshallsheds.com",
+    "quotes": "quotes@marshallsheds.com"
   },
   "address": {
     "street": "360 PR 1031",
@@ -23,9 +23,16 @@
     "instagram": "",
     "youtube": ""
   },
-  "dealerNotice": "Marshall Sheds is an independent authorized dealer. Every building we sell is produced by one of our manufacturing partners and ships direct from their plant. Steel building kits ship nationwide and are assembled on site; wood portable buildings are delivered finished inside our regional delivery area.",
+  "dealerNotice": "Marshall Sheds is an authorized independent dealer. The engineered steel buildings and wood portable buildings we sell are built by our manufacturing partners and shipped direct from the plant. Steel building kits ship nationwide; portable buildings are delivered finished within our regional delivery area.",
   "indexable": false,
-  "phonePending": true,
   "emailPending": true,
-  "formEndpoint": ""
+  "formEndpoint": "",
+  "ads": {
+    "enabled": false,
+    "provider": "",
+    "siteId": "",
+    "theme": "dark",
+    "floorCpm": "",
+    "excludePaths": ["/quote/", "/contact/"]
+  }
 }

@@ -18,7 +18,9 @@ const siblings = fam.items.filter((o: any) => o.slug !== option.slug);
 ---
 
 <Base
-  title={`${option.name} — ${fam.familyName}`}
+  {/* familyName ends in " Options" — fine as a heading, wasted characters in
+      a title that already names the option. */}
+  title={`${option.name} — ${fam.familyName.replace(/ Options$/, '')}`}
   description={option.summary}
   crumbs={[
     { label: 'Options & Finishes', href: '/options-and-finishes/' },

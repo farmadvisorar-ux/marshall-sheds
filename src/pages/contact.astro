@@ -2,7 +2,10 @@
 import Base from '../layouts/Base.astro';
 import site from '../data/site.json';
 
-const endpoint = import.meta.env.PUBLIC_FORM_ENDPOINT ?? site.formEndpoint ?? '';
+// `||`, not `??`. A CI/host variable that is defined-but-empty is not nullish,
+// so `??` lets "" win and silently override the real endpoint — which shipped
+// forms that posted nowhere on the sibling site.
+const endpoint = (import.meta.env.PUBLIC_FORM_ENDPOINT || site.formEndpoint || '').trim();
 
 // All three land in the same inbox, but publishing what each one is *for*
 // means a warranty question and a price request arrive pre-sorted.

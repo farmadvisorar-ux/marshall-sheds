@@ -156,10 +156,14 @@ a.row:hover .row__title { color: var(--accent); }
 }
 .rows--compact { border-top: 1px solid var(--border); }
 
-/* `.row` and `.card` set a display value, and an author display always beats
-   the UA sheet's `[hidden] { display: none }`. Without this, JS filtering that
-   sets `el.hidden = true` has no visible effect at all. */
-.row[hidden], .card[hidden] { display: none; }
+/* An author display value always beats the UA sheet's `[hidden] { display:
+   none }`, whatever the specificity, so any element carrying one silently
+   ignores `el.hidden = true`. Naming classes individually only ever covers the
+   ones someone remembered: `.row` and `.card` were listed here, which fixed the
+   inventory filter and left the quote form showing its portable-model field to
+   steel enquiries, because that field is a `.field`. Match the attribute itself
+   so the next component to gain a display value cannot reopen this. */
+[hidden] { display: none !important; }
 /* The compact columns are asymmetric, so a flipped row has to swap the track
    widths too — otherwise the photo takes the wide column on every other row. */
 .rows--compact .row:nth-child(even) { grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.8fr); }

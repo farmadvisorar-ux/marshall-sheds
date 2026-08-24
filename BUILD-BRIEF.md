@@ -1,8 +1,8 @@
-# Fast Sheds — build brief
+# Fresh Sheds — build brief
 
 Hand this file to a fresh Claude Code session in the new project box.
 
-**The job:** clone the Any Size site in full, rebrand it to Fast Sheds, give
+**The job:** clone the Any Size site in full, rebrand it to Fresh Sheds, give
 it a visibly different interface, and stand it up on its own domain as a
 completely separate operation. Same catalog, same photography, same
 architecture. Nothing links the two sites.
@@ -26,7 +26,7 @@ suspended. This is not a ranking effect to be optimised around — the listing
 stops existing. Google Voice issues a free second number in minutes. Sharing the
 building is fine; sharing the phone is not.
 
-Without its own number Fast Sheds still works as a website, but it cannot
+Without its own number Fresh Sheds still works as a website, but it cannot
 hold a Business Profile: no map pack, no "near me" results, no reviews.
 
 **2. Identical copy on two sites competes with itself.** Google picks one URL
@@ -52,10 +52,10 @@ Boxes. 75673 does not exist here and has been mistyped once already.
 ## 1. Get the code
 
 ```bash
-git clone https://github.com/farmadvisorar-ux/It-s-2026.git fast-sheds
-cd fast-sheds
+git clone https://github.com/farmadvisorar-ux/It-s-2026.git fresh-sheds
+cd fresh-sheds
 rm -rf .git dist
-git init && git add -A && git commit -m "Fork Any Size codebase as Fast Sheds"
+git init && git add -A && git commit -m "Fork Any Size codebase as Fresh Sheds"
 npm install
 npm run dev          # http://localhost:4321
 npm run build        # must report 160 pages before you change anything
@@ -74,7 +74,7 @@ schema and the OG tags together.
 
 ```json
 {
-  "name": "Fast Sheds",
+  "name": "Fresh Sheds",
   "tagline": "<new tagline>",
   "description": "<new description>",
   "phone": "(903) XXX-XXXX",
@@ -96,7 +96,7 @@ including the schema. Flipping them is the last step of the project.
 
 | File | Change |
 |---|---|
-| `package.json` | `"name": "fast-sheds"` |
+| `package.json` | `"name": "fresh-sheds"` |
 | `astro.config.mjs` | `site: 'https://<newdomain>'` |
 | `public/CNAME` | new domain, one line, no protocol |
 | `src/layouts/Base.astro` | the `new URL('https://anysize.shop')` origin fallback |
@@ -164,7 +164,7 @@ letter-spacing. 4px and 8px radii. Sticky translucent header carrying two
 six-column mega menus. Card grids on every index page. 1200px measure.
 Automatic dark mode. It reads industrial, dense, catalog-like.
 
-### Direction for Fast Sheds
+### Direction for Fresh Sheds
 
 **Palette — warm, not cool.** Bone or cream ground (`#faf7f2`), warm charcoal
 text (`#2b2622`), barn-red or deep-forest accent. Warm-versus-cool ground reads

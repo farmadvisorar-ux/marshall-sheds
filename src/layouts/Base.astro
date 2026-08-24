@@ -31,7 +31,7 @@ function clampDescription(text: string, max = 158): string {
 }
 const description = clampDescription(rawDescription);
 const fullTitle = title === site.name ? `${site.name} — ${site.tagline}` : `${title} | ${site.name}`;
-const origin = (Astro.site ?? new URL('https://fast-sheds.vercel.app')).origin;
+const origin = (Astro.site ?? new URL('https://fresh-sheds.vercel.app')).origin;
 const canonical = new URL(Astro.url.pathname, origin).href;
 // Social scrapers require an absolute URL — a root-relative path silently yields no preview.
 const ogImage = new URL(image ?? '/og/default.jpg', origin).href;

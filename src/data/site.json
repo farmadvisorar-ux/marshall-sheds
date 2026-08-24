@@ -4,11 +4,11 @@
   "description": "Independent dealer of wood portable buildings and engineered steel building kits — sheds, barns, garages, workshops and barndominiums.",
   "phone": "(430) 295-3979",
   "phoneRaw": "+14302953979",
-  "email": "",
+  "email": "info@fressheds.online",
   "emails": {
-    "info": "",
-    "sales": "",
-    "quotes": ""
+    "info": "info@fressheds.online",
+    "sales": "info@fressheds.online",
+    "quotes": "info@fressheds.online"
   },
   "address": {
     "street": "360 PR 1031",
@@ -26,6 +26,6 @@
   "dealerNotice": "Fresh Sheds is an independent authorized dealer. Every building we sell is produced by one of our manufacturing partners and ships direct from their plant. Steel building kits ship nationwide and are assembled on site; wood portable buildings are delivered finished inside our regional delivery area.",
   "indexable": false,
   "phonePending": false,
-  "emailPending": true,
-  "formEndpoint": ""
+  "emailPending": false,
+  "formEndpoint": "https://formspree.io/f/xkjwljwr"
 }

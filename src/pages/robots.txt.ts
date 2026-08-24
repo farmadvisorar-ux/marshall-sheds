@@ -9,7 +9,7 @@ import site from '../data/site.json';
  *
  * The sitemap is withheld until launch so nothing actively invites indexing.
  */
-const SITE = (import.meta.env.SITE ?? 'https://marshall-sheds.vercel.app').replace(/\/$/, '');
+const SITE = (import.meta.env.SITE ?? 'https://fast-sheds.vercel.app').replace(/\/$/, '');
 
 export const GET: APIRoute = () => {
   const body = site.indexable

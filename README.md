@@ -1,6 +1,6 @@
-# Marshall Sheds
+# Fast Sheds
 
-Marketing and catalog site for Marshall Sheds, an independent authorized dealer
+Marketing and catalog site for Fast Sheds, an independent authorized dealer
 carrying two lines:
 
 - **Engineered steel buildings** — bolt-together kits, engineered per site, shipped nationwide.
@@ -147,7 +147,7 @@ Every downloaded image was reviewed on a contact sheet before use. These were
 
 - **Four photos of identifiable people** — three of the same man in a blazer
   with a logo lapel pin, plus one selfie. Publishing them here implies those
-  people represent Marshall Sheds.
+  people represent Fast Sheds.
 - **Two photos carrying another company's identity** — service vans liveried
   for an unrelated firm, and a building with "HARRISON DISTRIBUTING" signage
   across the front, which would imply a customer relationship that does not
@@ -191,7 +191,7 @@ written for this site. Beyond the copyright question, duplicate text is actively
 harmful for SEO: search engines dedupe it, and a newer dealer domain loses that
 comparison to the manufacturer's established one every time.
 
-**The site does not claim to be the manufacturer.** Marshall Sheds is an
+**The site does not claim to be the manufacturer.** Fast Sheds is an
 independent authorized dealer. Copy consistently says "our manufacturing partner" rather than "we
 manufacture", because the latter would be inaccurate. Keep that distinction if you
 add pages.

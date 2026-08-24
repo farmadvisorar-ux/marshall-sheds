@@ -7,7 +7,7 @@ export default defineConfig({
   // Canonical origin. Set PUBLIC_SITE_URL in the host's environment at launch;
   // the fallback is the Vercel hostname, which is correct only while the site
   // is still noindex.
-  site: process.env.PUBLIC_SITE_URL ?? 'https://marshall-sheds.vercel.app',
+  site: process.env.PUBLIC_SITE_URL ?? 'https://fastsheds.com',
   output: 'static',
   build: { format: 'directory' },
   compressHTML: true,
